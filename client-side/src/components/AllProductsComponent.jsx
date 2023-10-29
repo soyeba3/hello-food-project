@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import ProductCard from "./ProductCard";
-import Spinner from "./Spinner";
+import ProductCardSkeleton from "./skeleton/ProductCardSkeleton";
 
 const AllProductsComponent = () => {
   const { products, loading } = useSelector((state) => state.product);
@@ -22,11 +22,14 @@ const AllProductsComponent = () => {
         </Link>
       </div>
       <div className="wrapper">
-        {products
-          .map((item) => <ProductCard item={item} key={item._id} />)
-          .slice(0, 10)}
+        {loading === true
+          ? Array(10)
+              .fill(1)
+              .map((item) => <ProductCardSkeleton />)
+          : products
+              .slice(0, 10)
+              .map((item) => <ProductCard item={item} key={item._id} />)}
       </div>
-      {loading && <Spinner />}
     </Container>
   );
 };

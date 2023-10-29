@@ -23,8 +23,8 @@ const CategoryWiseProducts = ({ category }) => {
       <div className="wrapper">
         {location?.pathname === "/"
           ? products
-              .map((item, index) => <ProductCard item={item} key={index} />)
               .slice(0, 10)
+              .map((item, index) => <ProductCard item={item} key={index} />)
           : products.map((item, index) => (
               <ProductCard item={item} key={index} />
             ))}

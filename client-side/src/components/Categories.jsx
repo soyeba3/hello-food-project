@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getAllCategories } from "../redux/features/category/categorySlice";
 import { mobile } from "../responsive";
+import CategoriesSkeleton from "./skeleton/CategoriesSkeleton";
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +64,6 @@ const Card = styled(Link)`
 `;
 const ImageDiv = styled.div`
   height: 100px;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +105,7 @@ const Text = styled.span`
 `;
 
 const Categories = () => {
-  const { categories } = useSelector((state) => state.category);
+  const { loading, categories } = useSelector((state) => state.category);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -115,21 +115,25 @@ const Categories = () => {
   return (
     <Container>
       <Wrapper>
-        {categories.map((category) => {
-          return (
-            <Card
-              to={`/categories/${category?.categoryUrl}`}
-              key={category?._id}
-            >
-              <ImageDiv>
-                <Image src={category?.img?.url} />
-              </ImageDiv>
-              <TextDiv>
-                <Text>{category?.name}</Text>
-              </TextDiv>
-            </Card>
-          );
-        })}
+        {loading === true
+          ? Array(4)
+              .fill(1)
+              .map((item) => <CategoriesSkeleton />)
+          : categories.map((category) => {
+              return (
+                <Card
+                  to={`/categories/${category?.categoryUrl}`}
+                  key={category?._id}
+                >
+                  <ImageDiv>
+                    <Image src={category?.img?.url} />
+                  </ImageDiv>
+                  <TextDiv>
+                    <Text>{category?.name}</Text>
+                  </TextDiv>
+                </Card>
+              );
+            })}
       </Wrapper>
     </Container>
   );

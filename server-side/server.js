@@ -28,10 +28,17 @@ cloudinary.config({
   secure: true,
 });
 
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "https://hellofood.com.bd",
+//   })
+// );
+
 app.use(
   cors({
     credentials: true,
-    origin: "https://hellofood.com.bd",
+    origin: "http://localhost:3000",
   })
 );
 
