@@ -29,12 +29,13 @@ const Card = styled.div`
 
   ${mobile({
     height: "80px",
+    width: "60px",
     flexBasis: "0",
     flex: 1,
   })}
 `;
 const ImageDiv = styled.div`
-  height: 80px;
+  height: 100px;
   width: 100px;
   display: flex;
   justify-content: center;
@@ -43,18 +44,7 @@ const ImageDiv = styled.div`
   border-radius: 10px;
   ${mobile({
     height: "45px",
-    width: "",
-  })}
-`;
-const TextDiv = styled.div`
-  height: 18px;
-  width: 80px;
-  text-align: center;
-  background-color: #d1d5db;
-  border-radius: 10px;
-  ${mobile({
-    height: "20px",
-    width: "100%",
+    width: "50px",
   })}
 `;
 
@@ -62,7 +52,6 @@ const CategoriesSkeleton = () => {
   return (
     <Card>
       <ImageDiv></ImageDiv>
-      <TextDiv></TextDiv>
     </Card>
   );
 };
