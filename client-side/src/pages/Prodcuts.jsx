@@ -9,6 +9,7 @@ import MobileMenu from "../components/MobileMenu";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
 import Spinner from "../components/Spinner";
+import ProductCardSkeleton from "../components/skeleton/ProductCardSkeleton";
 import { getSingleCategory } from "../redux/features/category/categorySlice";
 import { mobile } from "../responsive";
 
@@ -28,7 +29,6 @@ const Prodcuts = () => {
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
   const itemsPerPage = 10;
-
 
   useEffect(() => {
     const endOffset = itemOffset + itemsPerPage;
@@ -57,19 +57,15 @@ const Prodcuts = () => {
             <div className="name">
               <span>{category?.name}</span>
             </div>
-            {/* <div className="sort">
-              <span>Sort By : </span>
-              <select>
-                <option value="">Newly Added</option>
-                <option value="">A-Z</option>
-                <option value="">Z-A</option>
-              </select>
-            </div> */}
           </div>
           <div className="productsList">
-            {currentItems?.map((item) => {
-              return <ProductCard item={item} key={item._id} />;
-            })}
+            {loading === true
+              ? Array(5)
+                  .fill()
+                  .map((item) => <ProductCardSkeleton />)
+              : currentItems?.map((item) => {
+                  return <ProductCard item={item} key={item._id} />;
+                })}
           </div>
           <div>
             <ReactPaginate
