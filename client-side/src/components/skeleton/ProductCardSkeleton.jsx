@@ -7,9 +7,7 @@ const ProductCardSkeleton = () => {
       <CardWrapper>
         <div className="link">
           <div className="imageDiv"></div>
-          <div className="textDiv">
-            <span className="title"></span>
-          </div>
+          <div className="textDiv"></div>
         </div>
       </CardWrapper>
     </Container>
@@ -20,6 +18,11 @@ const Container = styled.div`
   justify-content: center;
   .link {
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 `;
 
@@ -33,7 +36,7 @@ const CardWrapper = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  margin-bottom: 13px;
+  padding: 10px;
   background-color: #fff;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
@@ -48,32 +51,22 @@ const CardWrapper = styled.div`
   }
 
   ${mobile({
-    height: "248px",
+    height: "210px",
     width: "160px",
     borderRadius: "5px",
-    marginBottom: "0",
   })}
-
-  .title {
-    font-size: 13px;
-    font-weight: bold;
-    color: #253d4e;
-
-    ${mobile({
-      fontSize: "11px",
-      fontWeight: 600,
-    })}
-  }
 
   .imageDiv {
     height: 200px;
     width: 190px;
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: #d1d5db;
     border-radius: 10px;
     ${mobile({
       height: "160px",
+      width: "130px",
     })}
   }
 
@@ -84,58 +77,10 @@ const CardWrapper = styled.div`
     align-items: center;
     width: 150px;
     height: 20px;
-    margin: 0 20px;
-    margin-top: 20px;
     border-radius: 9999px;
     background-color: #d1d5db;
-    /* border: 1px solid blue; */
     ${mobile({
-      margin: "10px 10px 0 10px",
-    })}
-  }
-
-  .priceAndButton {
-    display: flex;
-    width: 100%;
-    margin: 10px 20px;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-
-    ${mobile({
-      margin: "10px",
-    })}
-  }
-  .priceDiv {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .priceDiv > .product-price {
-    font-size: 16px;
-    font-weight: bold;
-    color: #3bb77e;
-    ${mobile({
-      fontSize: "11px",
-    })}
-  }
-
-  .priceAndButton button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: none;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 8px 14px;
-    color: #3bb77e;
-    background-color: #a1f6ce6c;
-    border-radius: 5px;
-    transition: 0.3s;
-    cursor: pointer;
-
-    ${mobile({
-      fontSize: "11px",
+      width: "120px",
     })}
   }
 `;
