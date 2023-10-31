@@ -5,7 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import logo from "../images/hello_food.png";
+import logo from "../images/hello food png-02.png";
 import { logout } from "../redux/features/auth/authSlice";
 import {
   getCartProducts,
@@ -50,8 +50,9 @@ const Logo = styled.div`
 `;
 
 const LogoImage = styled.img`
-  height: 50px;
-  width: 90px;
+  height: 60px;
+  width: 100px;
+  padding-top: 5px;
 
   ${tablet({
     height: "40px",
