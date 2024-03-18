@@ -76,7 +76,7 @@ const UpdateProduct = () => {
 
   const saveUpdateProduct = (e) => {
     e.preventDefault();
-    const { publicid, url } = product.img;
+    const img = product.img;
     const { _id } = product;
     const formData = new FormData();
     formData.append("productCode", product?.productCode);
@@ -88,8 +88,7 @@ const UpdateProduct = () => {
     formData.append("discount", Number(product?.discount));
     formData.append("description", description ? description : "");
     formData.append("image", productImage);
-    formData.append("publicid", publicid);
-    formData.append("imgUrl", url);
+    formData.append("img", img);
     formData.append("weight", product?.weight);
     dispatch(updateProduct({ formData, navigate, _id }));
   };
