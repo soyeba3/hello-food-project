@@ -8,6 +8,7 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import { getAllSliders } from "../redux/features/slider/sliderSlice";
 import { mobile, tablet } from "../responsive";
+import BannerSkeleton from "./skeleton/BannerSkeleton";
 
 const Wrapper = styled.div`
   .swiperStyle {
@@ -32,7 +33,7 @@ const Wrapper = styled.div`
 `;
 
 const Img = styled.img`
-  width: 100vw;
+  width: 100%;
   height: 70vh;
   text-align: center;
   object-fit: cover;
@@ -51,7 +52,7 @@ const Img = styled.img`
 const ImgLink = styled(Link)``;
 
 const Slider = () => {
-  const { sliders } = useSelector((state) => state.slider);
+  const { loading, sliders } = useSelector((state) => state.slider);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -72,13 +73,17 @@ const Slider = () => {
         modules={[Pagination, Autoplay]}
         className="mySwiper"
       >
-        {sliders.map((item) => (
-          <SwiperSlide className="swiperStyle" key={item._id}>
-            <ImgLink>
-              <Img src={item?.img?.url} alt="img"></Img>
-            </ImgLink>
-          </SwiperSlide>
-        ))}
+        {loading === true ? (
+          <BannerSkeleton />
+        ) : (
+          sliders.map((item) => (
+            <SwiperSlide className="swiperStyle" key={item._id}>
+              <ImgLink>
+                <Img src={item?.img?.url} alt="img"></Img>
+              </ImgLink>
+            </SwiperSlide>
+          ))
+        )}
       </Swiper>
     </Wrapper>
   );

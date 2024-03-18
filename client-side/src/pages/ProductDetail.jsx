@@ -9,11 +9,11 @@ import Footer from "../components/Footer";
 import MobileMenu from "../components/MobileMenu";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
-import Spinner from "../components/Spinner";
+import ProductDetailsSkeleton from "../components/skeleton/ProductDetailsSkeleton";
 import {
   addToCart,
-  add_buy_now_product,
   add_To_Cart,
+  add_buy_now_product,
 } from "../redux/features/cart/cartSlice";
 import { getSingleCategory } from "../redux/features/category/categorySlice";
 import { getSingleProduct } from "../redux/features/product/productSlice";
@@ -79,102 +79,108 @@ const ProductDetail = () => {
     <>
       <Navbar />
       <ProductDetailContainer>
-        <div className="wrapper">
-          <section className="topSection">
-            <div className="imageDiv">
-              <img src={product?.img?.url} alt="" />
-            </div>
-            <div className="infoDiv">
-              <h3>{product?.name}</h3>
-              <p className="availabilty">Availabilty : {stockAvailablity()}</p>
-              <h4 style={{ color: "#3bb54a" }}>
-                {product?.discount ? product?.discount : product?.price} Tk
-              </h4>
-              <div className="priceChoosen">
-                <button
-                  type="button"
-                  style={{
-                    backgroundColor: quantity > 1 ? "#3bb54a" : "#7cce86",
-                    cursor: quantity > 1 ? "pointer" : "not-allowed",
-                  }}
-                  onClick={() => handleQuantity("minus")}
-                >
-                  <AiOutlineMinus />
-                </button>
-                <input
-                  type="text"
-                  onChange={(e) => setQuantity(parseInt(e.target.value))}
-                  value={quantity ? quantity : 1}
-                />
-                <button
-                  name="plus"
-                  type="button"
-                  style={{
-                    cursor: product?.quantity === 0 ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => handleQuantity("plus")}
-                >
-                  <AiOutlinePlus />
-                </button>
+        {loading === true ? (
+          <ProductDetailsSkeleton />
+        ) : (
+          <div className="wrapper">
+            <section className="topSection">
+              <div className="imageDiv">
+                <img src={product?.img?.url} alt="" />
               </div>
-              <div className="addAndBuy">
-                <button
-                  disabled={product?.quantity === 0 && "disabled"}
-                  style={{
-                    cursor: product?.quantity === 0 && "not-allowed",
-                    backgroundColor: product?.quantity === 0 && "#ee65439e",
-                  }}
-                  onClick={(e) => handleAddToCart(e)}
-                  className="addToCart"
-                  type="button"
-                >
-                  Add to cart
-                </button>
-                <Link to="/billing" className="link">
+              <div className="infoDiv">
+                <h3>{product?.name}</h3>
+                <p className="availabilty">
+                  Availabilty : {stockAvailablity()}
+                </p>
+                <h4 style={{ color: "#3bb54a" }}>
+                  {product?.discount ? product?.discount : product?.price} Tk
+                </h4>
+                <div className="priceChoosen">
+                  <button
+                    type="button"
+                    style={{
+                      backgroundColor: quantity > 1 ? "#3bb54a" : "#7cce86",
+                      cursor: quantity > 1 ? "pointer" : "not-allowed",
+                    }}
+                    onClick={() => handleQuantity("minus")}
+                  >
+                    <AiOutlineMinus />
+                  </button>
+                  <input
+                    type="text"
+                    onChange={(e) => setQuantity(parseInt(e.target.value))}
+                    value={quantity ? quantity : 1}
+                  />
+                  <button
+                    name="plus"
+                    type="button"
+                    style={{
+                      cursor:
+                        product?.quantity === 0 ? "not-allowed" : "pointer",
+                    }}
+                    onClick={() => handleQuantity("plus")}
+                  >
+                    <AiOutlinePlus />
+                  </button>
+                </div>
+                <div className="addAndBuy">
                   <button
                     disabled={product?.quantity === 0 && "disabled"}
                     style={{
                       cursor: product?.quantity === 0 && "not-allowed",
-                      backgroundColor: product?.quantity === 0 && "#7cce86",
+                      backgroundColor: product?.quantity === 0 && "#ee65439e",
                     }}
-                    className="buyNow"
+                    onClick={(e) => handleAddToCart(e)}
+                    className="addToCart"
                     type="button"
-                    onClick={(e) => handleBuyNow(e)}
                   >
-                    Buy Now
+                    Add to cart
                   </button>
-                </Link>
+                  <Link to="/billing" className="link">
+                    <button
+                      disabled={product?.quantity === 0 && "disabled"}
+                      style={{
+                        cursor: product?.quantity === 0 && "not-allowed",
+                        backgroundColor: product?.quantity === 0 && "#7cce86",
+                      }}
+                      className="buyNow"
+                      type="button"
+                      onClick={(e) => handleBuyNow(e)}
+                    >
+                      Buy Now
+                    </button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </section>
-          <section className="midSection">
-            <h5>
-              <span className="des-heading">Description</span>
-            </h5>
-            <div
-              className="descDiv"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(product?.description),
-              }}
-            ></div>
-          </section>
-          <section className="bottomSection">
-            <h2>
-              <span>You may also like</span>
-            </h2>
-            <div className="similarProducts">
-              {similarProducts
-                ?.map((item) => {
-                  return <ProductCard item={item} key={item._id} />;
-                })
-                .slice(0, 10)}
-            </div>
-          </section>
-        </div>
+            </section>
+            <section className="midSection">
+              <h5>
+                <span className="des-heading">Description</span>
+              </h5>
+              <div
+                className="descDiv"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product?.description),
+                }}
+              ></div>
+            </section>
+            <section className="bottomSection">
+              <h2>
+                <span>You may also like</span>
+              </h2>
+              <div className="similarProducts">
+                {similarProducts
+                  ?.map((item) => {
+                    return <ProductCard item={item} key={item._id} />;
+                  })
+                  .slice(0, 10)}
+              </div>
+            </section>
+          </div>
+        )}
       </ProductDetailContainer>
       <MobileMenu />
       <Footer />
-      {loading && <Spinner />}
     </>
   );
 };

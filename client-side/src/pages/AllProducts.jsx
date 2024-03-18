@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 import MobileMenu from "../components/MobileMenu";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
-import Spinner from "../components/Spinner";
+import ProductCardSkeleton from "../components/skeleton/ProductCardSkeleton";
 import { getAllProducts } from "../redux/features/product/productSlice";
 import { mobile } from "../responsive";
 
@@ -53,9 +53,13 @@ const AllProducts = () => {
             <span>All Products</span>
           </div>
           <div className="productsList">
-            {currentItems?.map((item) => {
-              return <ProductCard item={item} key={item._id} />;
-            })}
+            {loading === true
+              ? Array(5)
+                  .fill(1)
+                  .map((item) => <ProductCardSkeleton />)
+              : currentItems?.map((item) => {
+                  return <ProductCard item={item} key={item._id} />;
+                })}
           </div>
           <div>
             <ReactPaginate
@@ -83,7 +87,6 @@ const AllProducts = () => {
       </Container>
       <Footer />
       <MobileMenu />
-      {loading && <Spinner />}
     </div>
   );
 };
