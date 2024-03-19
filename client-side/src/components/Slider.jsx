@@ -1,36 +1,12 @@
 import React, { useEffect } from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Autoplay, Pagination } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react/swiper-react";
-import "swiper/swiper-bundle.min.css";
-import "swiper/swiper.min.css";
 import { getAllSliders } from "../redux/features/slider/sliderSlice";
 import { mobile, tablet } from "../responsive";
 import BannerSkeleton from "./skeleton/BannerSkeleton";
-
-const Wrapper = styled.div`
-  .swiperStyle {
-    text-align: center;
-  }
-
-  .mySwiper {
-    /* margin: 20px 0px; */
-
-    ${tablet({
-      margin: 0,
-    })}
-
-    ${mobile({
-      margin: 0,
-    })}
-  }
-
-  .swiper-pagination-bullet-active {
-    background-color: #cbcbcb83;
-  }
-`;
 
 const Img = styled.img`
   width: 100%;
@@ -51,7 +27,26 @@ const Img = styled.img`
 `;
 const ImgLink = styled(Link)``;
 
-const Slider = () => {
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 1,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 1,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 1,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
+
+function Slider() {
   const { loading, sliders } = useSelector((state) => state.slider);
   const dispatch = useDispatch();
 
@@ -59,34 +54,20 @@ const Slider = () => {
     dispatch(getAllSliders());
     // eslint-disable-next-line
   }, []);
+
   return (
-    <Wrapper>
-      <Swiper
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          //dynamicBullets: true,
-          clickable: true,
-        }}
-        modules={[Pagination, Autoplay]}
-        className="mySwiper"
-      >
-        {loading === true ? (
-          <BannerSkeleton />
-        ) : (
-          sliders.map((item) => (
-            <SwiperSlide className="swiperStyle" key={item._id}>
-              <ImgLink>
-                <Img src={item?.img?.url} alt="img"></Img>
-              </ImgLink>
-            </SwiperSlide>
-          ))
-        )}
-      </Swiper>
-    </Wrapper>
+    <Carousel responsive={responsive}>
+      {loading === true ? (
+        <BannerSkeleton />
+      ) : (
+        sliders.map((item) => (
+          <ImgLink key={item.id}>
+            <Img src={item?.img?.url} alt="img"></Img>
+          </ImgLink>
+        ))
+      )}
+    </Carousel>
   );
-};
+}
 
 export default Slider;

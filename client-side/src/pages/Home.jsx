@@ -15,6 +15,8 @@ const Home = () => {
   // const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  console.log(categories);
+
   useEffect(() => {
     dispatch(getAllCategories());
     // eslint-disable-next-line
