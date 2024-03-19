@@ -9,6 +9,8 @@ import ProductCardSkeleton from "./skeleton/ProductCardSkeleton";
 const AllProductsComponent = () => {
   const { products, loading } = useSelector((state) => state.product);
 
+  console.log(products);
+
   return (
     <Container>
       <div className="header">
