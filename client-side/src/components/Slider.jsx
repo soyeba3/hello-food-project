@@ -8,6 +8,7 @@ import { getAllSliders } from "../redux/features/slider/sliderSlice";
 import { mobile, tablet } from "../responsive";
 import BannerSkeleton from "./skeleton/BannerSkeleton";
 
+const hello = 1;
 const Img = styled.img`
   width: 100%;
   height: 70vh;
