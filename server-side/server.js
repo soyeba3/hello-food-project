@@ -35,10 +35,18 @@ cloudinary.config({
 //   })
 // );
 
+// 
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "http://localhost:3000",
+//   })
+// );
+
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
   })
 );
 
@@ -47,7 +55,8 @@ app.use(
 
 app.use(cookieParser());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+
 
 const connect = () => {
   mongoose

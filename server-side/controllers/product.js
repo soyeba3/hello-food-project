@@ -46,6 +46,7 @@ const addProduct = async (req, res, next) => {
         folder: "hallo_food/product_image",
         resource_type: "image",
       });
+
     }
 
     const product = new Product({
