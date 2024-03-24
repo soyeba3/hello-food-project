@@ -39,28 +39,35 @@ const createCategory = async (req, res, next) => {
     let uploadedFile;
     if (req.file) {
       // Save image to cloudinary
-      uploadedFile = await cloudinary.uploader.upload(req.file.path, {
-        folder: "hallo_food/category_image",
-        resource_type: "image",
-      });
+      const {filename, path} = req.file;
+
+      // uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+        //   folder: "hallo_food/category_image",
+        //   resource_type: "image",
+        // });
+
+
+        uploadedFile = {
+          url: path,
+          name: filename
+        }
+    } else {
+      createError(404, "Image Not Found") 
     }
 
     const category = new Category({
       ...req.body,
       categoryUrl,
-      img: {
-        url: uploadedFile.secure_url,
-        publicid: uploadedFile.public_id,
-      },
+      img: {...uploadedFile},
     });
 
     await category.save();
 
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        return next(err);
-      });
-    }
+    // if (req.file) {
+    //   fs.unlink(req.file.path, (err) => {
+    //     return next(err);
+    //   });
+    // }
 
     res.status(200).send("Product added succesfully!");
   } catch (err) {
@@ -71,15 +78,26 @@ const createCategory = async (req, res, next) => {
 //Update a catergory
 const updateCategory = async (req, res, next) => {
   try {
-    const { name, imgUrl, publicid, id } = req.body;
 
-    if (!name) {
+    let {name} = req.body;
+    const id = req.params.id;
+    
+    const category = await Category.findById(id);
+
+    const img = category.img
+
+    if(!name){
+      name = category.name;
+    }
+
+
+    if (!category) {
       if (req.file) {
-        fs.unlink(req.file.path, (err) => {
-          return next(err);
+        fs.unlinkSync(req.file.path, (err) => {
+          return next(createError(403, "Category Not Found!"));
         });
       }
-      return createError(404, "Something went wrong !!!");
+      return next(createError(404, "Name not found!"));
     }
 
     const regex = /[^a-zA-Z0-9 ]/g;
@@ -93,8 +111,8 @@ const updateCategory = async (req, res, next) => {
 
     if (dupCategoryName) {
       if (req.file) {
-        fs.unlink(req.file.path, (err) => {
-          return next(err);
+        fs.unlinkSync(req.file.path, (err) => {
+          return next(createError(403, "Something went wrong!"));
         });
       }
       return next(
@@ -104,24 +122,49 @@ const updateCategory = async (req, res, next) => {
 
     // handle image upload
     let uploadedFile = {
-      url: imgUrl,
-      publicid: publicid,
+      url: img.url,
+      name: img.name,
     };
 
+    // if (req.file) {
+    //   // Delete previous one first
+    //   const response = await cloudinary.uploader.destroy(publicid);
+
+    //   // Save image to cloudinary
+    //   uploadData = await cloudinary.uploader.upload(req.file.path, {
+    //     folder: "hallo_food/category_image",
+    //     resource_type: "image",
+    //   });
+
+    //   uploadedFile = {
+    //     url: uploadData.url,
+    //     publicid: uploadData.public_id,
+    //   };
+    // }
+
+    // If file exist
     if (req.file) {
-      // Delete previous one first
-      const response = await cloudinary.uploader.destroy(publicid);
-
       // Save image to cloudinary
-      uploadData = await cloudinary.uploader.upload(req.file.path, {
-        folder: "hallo_food/category_image",
-        resource_type: "image",
-      });
+      const {filename, path} = req.file;
 
-      uploadedFile = {
-        url: uploadData.url,
-        publicid: uploadData.public_id,
-      };
+      // uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+        //   folder: "hallo_food/category_image",
+        //   resource_type: "image",
+        // });
+
+        
+
+        fs.unlinkSync(uploadedFile.url, (err) => {
+          return next( createError(403, "Image cannot be deleted!"));
+        });
+
+
+        uploadedFile = {
+          url: path,
+          name: filename
+        }
+    } else {
+      createError(404, "Image Not Found") 
     }
 
     await Category.findByIdAndUpdate(id, {
@@ -134,11 +177,6 @@ const updateCategory = async (req, res, next) => {
 
     res.status(200).send("Product updated successfully!");
   } catch (err) {
-    if (req.file) {
-      fs.unlink(req.file.path, (err) => {
-        return next(err);
-      });
-    }
     return next(err);
   }
 };
@@ -161,13 +199,25 @@ const deleteCategory = async (req, res, next) => {
       );
     }
 
-    const categoryId = category._id;
+    const categoryId = category?._id;
 
-    const publicid = category.img.publicid;
+    // Cloudinary Image delete
+    // const publicid = category.img.publicid;
 
-    await cloudinary.uploader.destroy(publicid);
+    // await cloudinary.uploader.destroy(publicid);
+
+    // File storage image delete
+    const path = category.img.url ;
 
     await Category.deleteOne({ _id: categoryId });
+
+    fs.unlinkSync(path,(err)=>{
+      next (createError(
+        403,
+        "Image cannot be deleted!"
+      ))
+    });
+
 
     res.status(200).send("Product deleted succesfully!");
   } catch (err) {
